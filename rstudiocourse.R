@@ -221,9 +221,52 @@ yardsale_prices[yardsale_prices$condition == "good", ]
 
 # can use if and else statements to define certain conditions - esp useful in functions, but can also be useful to set error conditions for your script
 
-# here we have a numeric seqeunce - but it's a character string - so  
-numericsequence <- c("1", "12", "55")
+# here we have a numeric seqeunce - but it's a character string - so  if we don't know what's in it but we want it to be numeric, we 
+numericsequence <- c("1", "-12", "55", "dog", "Twelve")
 
+# the ! indicates negation- !is.numeric checks if its numeric or not, and returns TRUE
+if (!base::is.numeric(numericsequence)){
+  
+  # now we might want to print the contents of the vector to the console 
+  print(numericsequence)
+  
+  # now - we might want to convert it to a numeric sequence, and check if that puts any missign values in it 
+  numericsequence <- base::as.numeric(numericsequence)
+  
+  # to make this a little clearer, we'll write the test here
+  numerictest <- base::is.na(numericsequence)
+  
+  # base::is.na() is a vectorized function, so it automatically runs on each element of the vector - and "dog" is NA, so the last value of the vector is true
+  print(numerictest)
+  
+  # as a first test - let's make sure that we didn't just make the whole vector into missing values
+  # base::all() checks if all values in a logical vector are TRUE - in this case all(numerictest) returns FALSE because not all values are missing
+  if (base::all(numerictest)){
+    
+    # lets just return an error message if all of the numeric vector is missing 
+    base::stop("All values of numeric vector are missing after converting to numeric; check to make sure vector is actually made up of numbers")
+    
+  }
+  
+  # so if we get past that check - there might still be missign values in this vector - and let's say we want to remove them, so we'll write an else if statemet
+  ## we don't actually need the else here, but will include it
+  # base::any checks if any values of a logical vector are true
+  else if (base::any(numerictest)){
+    
+    # lets say we want to write a warnignt that we are removing some values though - because looking at the vector, "Twelve" is a numer that's stored as something that won't get returned as a number, so its good to know some things are getting cut out here
+    base::warning("Some values in numeric vector missing and removed; may want to inspect numeric vector")
+    
+    # now we'll filter the missing values out of the sequence
+    numericsequence <- numericsequence[!numerictest]
+    
+  }
+  
+}
+
+# TASK - write a sequence of if/else statements that checks if the length of numericsequence is A) 3, B) 7, or C any other number. if it's 3, add the number 3 to the end of it; if it's 7, print a message; and if it's any other value, return an error messgage  
+
+
+# practically - this tends to be a little more useful in writing functions - but it's still good to understand the principals
 
 
 ## reading in datasets ----
